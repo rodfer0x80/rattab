@@ -54,13 +54,13 @@ class Debuglog():
     def log(self, txt, sep="\n"):
         try:
             while not self.deadlock.toggle(self.debuglog_local):
-                continue
+                _ = 0
             fp = open(self.debuglog_local, 'a')
             c =  str(datetime.datetime.now()).split('.')[0].replace(' ', '_')
             fp.write(f"{c}{CSV_SEP}{txt}{sep}")
             fp.close()
             while not self.deadlock.toggle(self.debuglog_local):
-                continue
+                _ = 0
             return SUCCESS
         except Exception as e:
             sys.stderr.write(e)
@@ -77,7 +77,7 @@ class Utils:
         return None
 
     def initFile(file_local, mode='r'):
-        if mode == 'r'
+        if mode == 'r':
             try:
                 fp = open(file_local, 'r')
                 fp.close()
@@ -88,7 +88,13 @@ class Utils:
                     fp.close()
                 except Exception as e:
                     return handleError(e, WRITE_FILE_ERROR)
-        elif mode == 'w'
+        elif mode == 'w':
+            try:
+                fp = open(file_local, 'w')
+                fp.write("")
+                fp.close()
+            except Exception as e:
+                return handleError(e, WRITE_FILE_ERROR)
         else:
             return handleError("Wrong file IO mode", USER_INPUT_ERROR)
         return SUCCESS
@@ -119,9 +125,9 @@ class RatTab:
             fp = open(self.dictionary_local, 'r')
             self.dictionary = fp.readlines()
             fp.close()
+            return SUCCESS
         except FileNotFoundError:
             self.dictionary = list()
-            continue
         try:
             initFile(self.dictionary)
         except Exception as e:
@@ -181,4 +187,4 @@ class RatTab:
 
 if __name__ == '__main__':
     rattab = RatTab()
-    sys.exit(rattab.runme()
+    sys.exit(rattab.runme())
